@@ -40,3 +40,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# project specific
+/.archives/
+systemprompt.md
+zaccess.txt
+z_systemprompt.txt
+*.zip
+*.tar.gz
+
