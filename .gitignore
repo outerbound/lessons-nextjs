@@ -45,6 +45,7 @@ next-env.d.ts
 /.archives/
 systemprompt.md
 zaccess.txt
+zgithub.txt
 z_systemprompt.txt
 *.zip
 *.tar.gz

@@ -1,0 +1,21 @@
+-- lessons table
+create table public.lessons (
+  id uuid primary key default gen_random_uuid(),
+  outline text not null,
+  title text,
+  status text not null default 'queued', -- queued, generating, generated, failed
+  generated_tsx text,     -- the raw TypeScript/TSX produced by the LLM
+  compiled_jsx text,       -- compiled JS (string) stored for quick load
+  error_text text
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+);
+
+-- traces table (records prompts/responses)
+create table public.traces (
+  id uuid primary key default gen_random_uuid(),
+  lesson_id uuid references public.lessons(id) on delete cascade,
+  step text not null, -- e.g. "prompt_sent", "llm_response", "compile_start", etc
+  payload jsonb,
+  created_at timestamptz default now()
+);

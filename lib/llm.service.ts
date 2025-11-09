@@ -12,6 +12,7 @@ const apiKey = process.env['LLM_API_KEY'];
 const model = process.env['LLM_MODEL'] || 'gpt-4o-mini';
 const inputCostPer1kTokens = parseFloat(process.env['LLM_INPUT_COST_PER_1K_TOKENS'] || '0');
 const outputCostPer1kTokens = parseFloat(process.env['LLM_OUTPUT_COST_PER_1K_TOKENS'] || '0');
+const temperature = parseFloat(process.env['LLM_TEMPERATURE'] || '0.0');
 const openai = new OpenAI({
   baseURL: baseURL,//incase of custom endpoint
   apiKey: apiKey,
@@ -43,19 +44,10 @@ export async function generateLLMResponse(prompt: string, userId?: string, sessi
     const result = await openai.chat.completions.create({
       model: model,
       messages: [{ role: 'user', content: prompt }],
+      temperature: temperature,
     });
     // Extract response and usage
     const responseText = result.choices[0]?.message?.content || '';
-    const codeblock1 = '```html';
-    // Clean response if wrapped in code block
-    const codeblock2 = '```';
-    let cleanedResponse = responseText;
-    if (responseText.startsWith(codeblock1) && responseText.endsWith(codeblock2)) {
-      cleanedResponse = responseText.slice(codeblock1.length, -codeblock2.length).trim();
-    } else if (responseText.startsWith(codeblock2) && responseText.endsWith(codeblock2)) {
-      cleanedResponse = responseText.slice(codeblock2.length, -codeblock2.length).trim();
-    }
-
     const usage = result.usage;
     const inputTokens = usage?.prompt_tokens || 0;
     const outputTokens = usage?.completion_tokens || 0;
@@ -64,9 +56,9 @@ export async function generateLLMResponse(prompt: string, userId?: string, sessi
     // Update generation with details
     generation.update({
       model: result.model, // Actual model used
-      modelParameters: { temperature: 0.0 },
+      modelParameters: { temperature: temperature },
       input: [{ role: 'user', content: prompt }],
-      output: { role: 'assistant', content: cleanedResponse },
+      output: { role: 'assistant', content: responseText },
       usageDetails: {
         inputTokens,
         outputTokens,

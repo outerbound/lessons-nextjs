@@ -11,3 +11,11 @@ export type Lesson = {
   
   created_at?: string;
 };
+
+export type Trace = {
+  id: string;
+  lesson_id: string;
+  step: string;
+  payload: any;
+  created_at?: string;
+};
