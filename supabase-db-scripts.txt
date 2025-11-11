@@ -6,7 +6,7 @@ create table public.lessons (
   status text not null default 'queued', -- queued, generating, generated, failed
   generated_tsx text,     -- the raw TypeScript/TSX produced by the LLM
   compiled_jsx text,       -- compiled JS (string) stored for quick load
-  error_text text
+  error_text text,
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
 );
