@@ -14,7 +14,7 @@ export default function JSXRenderer({ code }: { code: string }) {
       try {
         const wrapped = `
           const React = window.__REACT__;
-          const { useState, useEffect } = React;
+          const { useState, useEffect, useCallback, useMemo, useContext, useRef } = React;
           ${code}
         `;
 
